@@ -23,10 +23,7 @@ def main():
     bj = BlackJackMachine()
     while bj.current_state.id != 'exitState':
         if bj.current_state.id in ['initState', 'userState']:
-            print(f'Dealer\'s current hand: {dealer_score}')
-            print(f'User\'s current hand: {user_score}')
-            decision = input("Hit or stand (hit/stand): ")
-
+            # TODO: fix order of inputting hit or stand and display            
 
             if bj.current_state.id == 'initState':
                 # Set initial score of user and dealer each new game
@@ -41,7 +38,7 @@ def main():
                 else:
                     print('Invalid decision\n')
 
-            elif bj.current_state.id == 'userState':
+            else:
                 # Increment user's score if they want to hit
                 # Else, dealer's turn
                 print('here', decision)
@@ -50,6 +47,10 @@ def main():
                     user_score+=random.randint(1,10)
                 else:
                     bj.switchDealer()
+            print(f'Dealer\'s current hand: {dealer_score}')
+            print(f'User\'s current hand: {user_score}')
+
+            decision = input("Hit or stand (hit/stand): ")
 
         elif bj.current_state.id == 'dealerState':
             # If user didn't bust, draw card until dealer gets close to 21
