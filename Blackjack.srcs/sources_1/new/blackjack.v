@@ -4,7 +4,8 @@ module top_blackjack(
     input Clk,
     input Rst,
     input Hit,
-    input Stand
+    input Stand,
+    input Restart
     );
     
     integer dealer_score = 0;   // Dealer's current score
@@ -31,13 +32,23 @@ module top_blackjack(
                 next_state = userState;
             end
             userState: begin
-                // do stuff
+                // if user hits, keep going
+                // else, switch to dealer's turn
+                if (Stand) begin
+                    next_state = dealerState;
+                end
             end
             dealerState: begin
-                // do stuff
+                // increment dealer's score until it reaches 17 or below
+                if (dealer_score > 17) begin
+                    next_state = scoreState;
+                end
             end
             scoreState: begin
-                // do stuff
+                // display scores
+                if (Restart) begin
+                    next_state = initState;
+                end
             end
             default: next_state = initState;
     
