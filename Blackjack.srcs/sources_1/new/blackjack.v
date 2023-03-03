@@ -1,11 +1,17 @@
 `timescale 1ns / 1ps
 
-module top_blackjack(
+
+// TODO: need to work on 7 segment display variables
+
+module blackjack(
     input Clk,
     input Rst,
     input Hit,
     input Stand,
-    input Restart
+    input Restart,
+    output Win,
+    output Lose,
+    output Draw
     );
     
     integer dealer_score = 0;   // Dealer's current score
@@ -29,17 +35,20 @@ module top_blackjack(
         case(cur_state)
             initState: begin
                 // randomize dealer_score and user_score
+                // display on 7-segment display
                 next_state = userState;
             end
             userState: begin
                 // if user hits, keep going
                 // else, switch to dealer's turn
+                // update on 7-seg display
                 if (Stand) begin
                     next_state = dealerState;
                 end
             end
             dealerState: begin
                 // increment dealer's score until it reaches 17 or below
+                // update on 7-seg display
                 if (dealer_score > 17) begin
                     next_state = scoreState;
                 end
