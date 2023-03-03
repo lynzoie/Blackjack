@@ -33,20 +33,18 @@ def main():
             bj.switchUser()
 
         elif bj.current_state.id == 'userState':
-            # Increment user's score if they want to hit
-            # Else, dealer's turn
-
-            print(f'Dealer\'s current hand: {dealer_score}')
-            print(f'User\'s current hand: {user_score}')
 
             # User decides if they want to hit or stand
             decision = input("Hit or stand (hit/stand): ")
             print(f'You entered: {decision}\n')
 
+            # If user wants to stand or already receives 21, switch to dealer
             if decision == "stand" or user_score == 21:
                 bj.switchDealer()
             elif decision == "hit":
+                # Increment user's score if they want to hit
                 user_score+=random.randint(1,10)
+                # If user already busts, switch to dealer
                 if user_score > 21:
                     bj.switchDealer()
             else:
@@ -71,16 +69,14 @@ def main():
                 elif user_score == dealer_score:
                     print('Draw')
 
-            # Print specific scores
-            print('Final score:')
-            print(f'Dealer\'s final score: {dealer_score}')
-            print(f'User\'s final score: {user_score}\n')
-
             resume = input('Play again? Enter any key or enter \'n\' to quit: ')
             if resume == 'n':
                 bj.switchExit()
             else:
                 bj.switchInit()
+
+        print(f'Dealer\'s current hand: {dealer_score}')
+        print(f'User\'s current hand: {user_score}\n')
         
 if __name__ == "__main__":
     main()

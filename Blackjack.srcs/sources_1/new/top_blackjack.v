@@ -6,14 +6,7 @@ module top_blackjack(
     input Btn
     );
     
-    integer dealer_score = 0;   // Dealer's current score
-    integer user_score = 0;     // User's current score
-    
-    
-    always @(posedge(Clk)) 
-    begin
-    
-    end 
+    // Map real buttons to blackjack module
     
 
 endmodule
