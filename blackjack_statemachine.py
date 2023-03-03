@@ -21,36 +21,36 @@ class BlackJackMachine(StateMachine):
 
 def main():
     bj = BlackJackMachine()
+    decision = ''
     while bj.current_state.id != 'exitState':
-        if bj.current_state.id in ['initState', 'userState']:
-            # TODO: fix order of inputting hit or stand and display            
 
-            if bj.current_state.id == 'initState':
-                # Set initial score of user and dealer each new game
-                user_score = random.randint(1,21)
-                dealer_score = random.randint(1,21)
+        if bj.current_state.id == 'initState':
+            # Set initial score of user and dealer each new game
+            user_score = random.randint(1,21)
+            dealer_score = random.randint(1,21)
+            
+            # Start game
+            bj.switchUser()
 
-                # User decides if they want to hit or stand
-                decision = input("Hit or stand (hit/stand): ")
-                print(f'You entered: {decision}\n')
-                if decision == "hit" or decision == "stand":
-                    bj.switchUser()
-                else:
-                    print('Invalid decision\n')
+        elif bj.current_state.id == 'userState':
+            # Increment user's score if they want to hit
+            # Else, dealer's turn
 
-            else:
-                # Increment user's score if they want to hit
-                # Else, dealer's turn
-                print('here', decision)
-                if decision == "hit":
-                    print('incrementing')
-                    user_score+=random.randint(1,10)
-                else:
-                    bj.switchDealer()
             print(f'Dealer\'s current hand: {dealer_score}')
             print(f'User\'s current hand: {user_score}')
 
+            # User decides if they want to hit or stand
             decision = input("Hit or stand (hit/stand): ")
+            print(f'You entered: {decision}\n')
+
+            if decision == "stand" or user_score == 21:
+                bj.switchDealer()
+            elif decision == "hit":
+                user_score+=random.randint(1,10)
+                if user_score > 21:
+                    bj.switchDealer()
+            else:
+                print('Invalid decision\n')
 
         elif bj.current_state.id == 'dealerState':
             # If user didn't bust, draw card until dealer gets close to 21
