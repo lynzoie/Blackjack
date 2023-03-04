@@ -14,7 +14,7 @@ module blackjack(
     output Draw
     );
     
-    integer dealer_score = 0;   // Dealer's current score
+    integer dealer_score = 18;   // Dealer's current score
     integer user_score = 0;     // User's current score
     
     // Internal constants
@@ -25,14 +25,30 @@ module blackjack(
             initState = 2'b00,
             userState = 2'b01,
             dealerState = 2'b10,
-            scoreState = 2'b11,
+            scoreState = 2'b11;
 
     reg [C_SIZE-1:0] cur_state, next_state;
 
+
+    // Set initial values
+    always @(posedge(Clk), posedge(Rst))
+    begin
+        if (Rst)    // go to state zero if reset
+        begin
+            cur_state <= initState;
+        end
+        else
+        begin
+            cur_state <= next_state;
+        end
+    end
+
+
+    // Statemachine
     always @(posedge(Clk), posedge(Rst)) 
     begin
-        next_state = cur_state
-        case(cur_state)
+        next_state = cur_state;
+        case(cur_state) 
             initState: begin
                 // randomize dealer_score and user_score
                 // display on 7-segment display
@@ -59,8 +75,10 @@ module blackjack(
                     next_state = initState;
                 end
             end
-            default: next_state = initState;
-    
+            default: begin
+                next_state = initState;
+            end
+        endcase
     end 
     
 
