@@ -3,6 +3,8 @@
 
 // TODO: need to work on 7 segment display variables
 
+// TODO: check if randomizing variable to add to dealer_score and user_score
+// is accurate, may be due to issues with signed/unsigned integers
 module blackjack(
     input Clk,
     input Rst,
@@ -14,7 +16,7 @@ module blackjack(
     output Draw
     );
     
-    integer dealer_score = 18;   // Dealer's current score
+    integer dealer_score = 0 ;   // Dealer's current score
     integer user_score = 0;     // User's current score
     
     // Internal constants
@@ -58,8 +60,14 @@ module blackjack(
                 // TODO: display on 7-segment display
 
                 // Randomize user_score and dealer_score
-                user_score = $urandom_range(1, 21);
-                dealer_score = $urandom_range(1, 21);
+                user_score = {$random} % 22;
+                dealer_score = {$random} % 22;
+
+                // Reset outcome
+                Win_Reg     = 1'b0;
+                Lose_Reg    = 1'b0;
+                Draw_Reg    = 1'b0;
+
                 // Switch to userState after randomization
                 next_state = userState;
             end
@@ -69,18 +77,22 @@ module blackjack(
 
                 // If randomized score is already 21 or first choice is hit
                 // switch to dealerState
-                if (Stand || user_score == 21) 
+                if (Stand || user_score == 21 || dealer_score == 21) 
                 begin
                     next_state = dealerState;
                 end
                 else if (Hit)
                 begin
-                    // Increment score by random number between 1-10
-                    user_score = user_score + $urandom_range(1, 10);
+
                     // If user already busts, switch to dealer
                     if (user_score >= 21)
                     begin
                         next_state = dealerState;
+                    end
+                    else
+                    begin
+                        // Increment score by random number between 1-10
+                        user_score = user_score + {$random} % 11;
                     end
                 end
             end
@@ -88,11 +100,14 @@ module blackjack(
             begin
                 // TODO: update on 7-seg display
 
-                // Increment dealer's score until it reaches 17 or below
-                dealer_score = dealer_score + $urandom_range(1, 10);
-                if (dealer_score > 17) 
+                if (dealer_score > 17 || user_score >= 21) 
                 begin
                     next_state = scoreState;
+                end
+                else
+                begin
+                    // Increment dealer's score until it reaches 17 or below
+                    dealer_score = dealer_score + {$random} % 11;
                 end
             end
             scoreState: 
@@ -100,19 +115,19 @@ module blackjack(
                 // TODO: display scores on 7-seg display
 
                 // Display if User won, lost, or drew
-                if (user_score > dealer_score)
+                if ((user_score < dealer_score && dealer_score <= 21) || user_score > 21)
                 begin
-                    Win_Reg     = 1'b1;
-                    Lose_Reg    = 1'b0;
-                    Draw_Reg    = 1'b0;
-                end
-                else if (user_score < dealer_score)
-                begin 
                     Win_Reg     = 1'b0;
                     Lose_Reg    = 1'b1;
                     Draw_Reg    = 1'b0;
+                end
+                else if ((user_score > dealer_score && user_score <= 21) || dealer_score > 21)
+                begin 
+                    Win_Reg     = 1'b1;
+                    Lose_Reg    = 1'b0;
+                    Draw_Reg    = 1'b0;
                 end 
-                else
+                else 
                 begin
                     Win_Reg     = 1'b0;
                     Lose_Reg    = 1'b0;

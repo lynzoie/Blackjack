@@ -11,7 +11,7 @@ module tb_blackjack;
     wire Win, Lose, Draw;
     
     localparam period = 0.5;    // duration for each bit of the clock, 100MHz clock
-    blackjack UUT(.Clk(Clk), .Rst(Rst), .Hit(Hit), .Stand(Stand), .Restart(Restart));
+    blackjack UUT(.Clk(Clk), .Rst(Rst), .Hit(Hit), .Stand(Stand), .Restart(Restart), .Win(Win), .Lose(Lose), .Draw(Draw));
     
     
     // Create fake clock
