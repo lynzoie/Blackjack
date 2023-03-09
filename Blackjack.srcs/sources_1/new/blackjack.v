@@ -29,6 +29,10 @@ module blackjack(
 
     reg [C_SIZE-1:0] cur_state, next_state;
 
+    // Output reg
+    reg Win_Reg;
+    reg Lose_Reg;
+    reg Draw_Reg;
 
     // Set initial values
     always @(posedge(Clk), posedge(Rst))
@@ -49,37 +53,87 @@ module blackjack(
     begin
         next_state = cur_state;
         case(cur_state) 
-            initState: begin
-                // randomize dealer_score and user_score
-                // display on 7-segment display
+            initState: 
+            begin
+                // TODO: display on 7-segment display
+
+                // Randomize user_score and dealer_score
+                user_score = $urandom_range(1, 21);
+                dealer_score = $urandom_range(1, 21);
+                // Switch to userState after randomization
                 next_state = userState;
             end
-            userState: begin
-                // if user hits, keep going
-                // else, switch to dealer's turn
-                // update on 7-seg display
-                if (Stand) begin
+            userState: 
+            begin
+                // TODO: update on 7-seg display
+
+                // If randomized score is already 21 or first choice is hit
+                // switch to dealerState
+                if (Stand || user_score == 21) 
+                begin
                     next_state = dealerState;
                 end
+                else if (Hit)
+                begin
+                    // Increment score by random number between 1-10
+                    user_score = user_score + $urandom_range(1, 10);
+                    // If user already busts, switch to dealer
+                    if (user_score >= 21)
+                    begin
+                        next_state = dealerState;
+                    end
+                end
             end
-            dealerState: begin
-                // increment dealer's score until it reaches 17 or below
-                // update on 7-seg display
-                if (dealer_score > 17) begin
+            dealerState: 
+            begin
+                // TODO: update on 7-seg display
+
+                // Increment dealer's score until it reaches 17 or below
+                dealer_score = dealer_score + $urandom_range(1, 10);
+                if (dealer_score > 17) 
+                begin
                     next_state = scoreState;
                 end
             end
-            scoreState: begin
-                // display scores
-                if (Restart) begin
+            scoreState: 
+            begin
+                // TODO: display scores on 7-seg display
+
+                // Display if User won, lost, or drew
+                if (user_score > dealer_score)
+                begin
+                    Win_Reg     = 1'b1;
+                    Lose_Reg    = 1'b0;
+                    Draw_Reg    = 1'b0;
+                end
+                else if (user_score < dealer_score)
+                begin 
+                    Win_Reg     = 1'b0;
+                    Lose_Reg    = 1'b1;
+                    Draw_Reg    = 1'b0;
+                end 
+                else
+                begin
+                    Win_Reg     = 1'b0;
+                    Lose_Reg    = 1'b0;
+                    Draw_Reg    = 1'b1;
+                end 
+
+                // If user wants to play again, restart at initState
+                if (Restart) 
+                begin
                     next_state = initState;
                 end
             end
-            default: begin
+            default: 
+            begin
                 next_state = initState;
             end
         endcase
     end 
     
+    assign Win = Win_Reg;
+    assign Lose = Lose_Reg;
+    assign Draw = Draw_Reg;
 
 endmodule

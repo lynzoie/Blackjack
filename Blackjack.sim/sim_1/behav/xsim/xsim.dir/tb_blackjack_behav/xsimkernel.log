@@ -1,4 +1,4 @@
-Running: xsim.dir/tb_blackjack_behav/xsimk.exe -simmode gui -wdb tb_blackjack_behav.wdb -simrunnum 0 -socket 55422
+Running: xsim.dir/tb_blackjack_behav/xsimk.exe -simmode gui -wdb tb_blackjack_behav.wdb -simrunnum 0 -socket 53723
 Design successfully loaded
-Design Loading Memory Usage: 6256 KB (Peak: 6256 KB)
-Design Loading CPU Usage: 15 ms
+Design Loading Memory Usage: 6240 KB (Peak: 6240 KB)
+Design Loading CPU Usage: 78 ms
