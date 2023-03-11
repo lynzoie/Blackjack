@@ -14,10 +14,8 @@ module blackjack(
     output Lose,
     output Draw
     );
-    
-    integer dealer_score = 0 ;   // Dealer's current score
-    integer user_score = 0;     // User's current score
-    
+
+    // -------------- INITIALIZATION --------------//
     // Internal constants
     parameter C_SIZE = 2;
 
@@ -27,13 +25,8 @@ module blackjack(
             userState = 2'b01,
             dealerState = 2'b10,
             scoreState = 2'b11;
-
     reg [C_SIZE-1:0] cur_state, next_state;
 
-    // Input reg 
-//    reg rst_reg;
-//    reg hit_reg;
-//    reg stand_reg;
 
     // Debounced input
     debounce db_rst(Rst, Clk, rst_reg);
@@ -44,6 +37,10 @@ module blackjack(
     reg win_reg;
     reg lose_reg;
     reg draw_reg;
+
+    // Dealer and User's scores
+    integer dealer_score;
+    integer user_score;
 
     // Set initial values
     always @(posedge(Clk), posedge(Rst))
@@ -60,7 +57,8 @@ module blackjack(
     end
 
 
-    // Statemachine
+    // ------------- START OF MODULES -------------//
+    // ------- Statemachine ------- //
     always @(posedge(Clk), posedge(Rst)) 
     begin
         next_state = cur_state;
@@ -163,7 +161,7 @@ module blackjack(
 
 endmodule
 
-// Debouncer
+// ------- Debounce Module ------- //
 module debounce(
     input pb_1,
     input clk,
@@ -187,7 +185,7 @@ end
 
 endmodule
 
-
+// ----- Debounce Submodules ----- //
 // Slow clock
 module clock_div(
     input clk_100M,
