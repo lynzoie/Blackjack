@@ -37,11 +37,10 @@ module tb_blackjack;
         #period;
         
         Stand = 1'b0;
-        Restart = 1'b1;
+        Rst = 1'b1;
         #10;
         
-        Restart = 1'b0;
-        
+        Rst = 1'b0;
     
     end
     

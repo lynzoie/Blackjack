@@ -10,7 +10,6 @@ module blackjack(
     input Rst,
     input Hit,
     input Stand,
-    input Restart,
     output Win,
     output Lose,
     output Draw
@@ -31,15 +30,26 @@ module blackjack(
 
     reg [C_SIZE-1:0] cur_state, next_state;
 
+    // Input reg 
+    reg rst_reg;
+    reg hit_reg;
+    reg stand_reg;
+
+    // Debounced input
+    debounce db_rst(Rst, Clk, rst_reg);
+    debounce db_hit(Hit, Clk, hit_reg);
+    debounce db_stand(Stand, Clk, stand_reg);
+
     // Output reg
-    reg Win_Reg;
-    reg Lose_Reg;
-    reg Draw_Reg;
+    reg win_reg;
+    reg lose_reg;
+    reg draw_reg;
 
     // Set initial values
     always @(posedge(Clk), posedge(Rst))
     begin
-        if (Rst)    // go to state zero if reset
+        // go to state zero if reset
+        if (rst_reg) 
         begin
             cur_state <= initState;
         end
@@ -64,9 +74,9 @@ module blackjack(
                 dealer_score = {$random} % 22;
 
                 // Reset outcome
-                Win_Reg     = 1'b0;
-                Lose_Reg    = 1'b0;
-                Draw_Reg    = 1'b0;
+                win_reg     = 1'b0;
+                lose_reg    = 1'b0;
+                draw_reg    = 1'b0;
 
                 // Switch to userState after randomization
                 next_state = userState;
@@ -77,11 +87,11 @@ module blackjack(
 
                 // If randomized score is already 21 or first choice is hit
                 // switch to dealerState
-                if (Stand || user_score == 21 || dealer_score == 21) 
+                if (stand_reg || user_score == 21 || dealer_score == 21) 
                 begin
                     next_state = dealerState;
                 end
-                else if (Hit)
+                else if (hit_reg)
                 begin
 
                     // If user already busts, switch to dealer
@@ -117,25 +127,25 @@ module blackjack(
                 // Display if User won, lost, or drew
                 if ((user_score < dealer_score && dealer_score <= 21) || user_score > 21)
                 begin
-                    Win_Reg     = 1'b0;
-                    Lose_Reg    = 1'b1;
-                    Draw_Reg    = 1'b0;
+                    win_reg     = 1'b0;
+                    lose_reg    = 1'b1;
+                    draw_reg    = 1'b0;
                 end
                 else if ((user_score > dealer_score && user_score <= 21) || dealer_score > 21)
                 begin 
-                    Win_Reg     = 1'b1;
-                    Lose_Reg    = 1'b0;
-                    Draw_Reg    = 1'b0;
+                    win_reg     = 1'b1;
+                    lose_reg    = 1'b0;
+                    draw_reg    = 1'b0;
                 end 
                 else 
                 begin
-                    Win_Reg     = 1'b0;
-                    Lose_Reg    = 1'b0;
-                    Draw_Reg    = 1'b1;
+                    win_reg     = 1'b0;
+                    lose_reg    = 1'b0;
+                    draw_reg    = 1'b1;
                 end 
 
-                // If user wants to play again, restart at initState
-                if (Restart) 
+                // If user wants to play again, reset at initState
+                if (rst_reg) 
                 begin
                     next_state = initState;
                 end
@@ -147,8 +157,61 @@ module blackjack(
         endcase
     end 
     
-    assign Win = Win_Reg;
-    assign Lose = Lose_Reg;
-    assign Draw = Draw_Reg;
+    assign Win = win_reg;
+    assign Lose = lose_reg;
+    assign Draw = draw_reg;
 
+endmodule
+
+// Debouncer
+module debounce(
+    input pb_1,
+    input clk,
+    output reg pb_out
+    );
+
+wire slow_clk;
+wire Q0, Q1, Q2, Q2_bar;
+wire btn_out;
+
+clock_div u1(clk,slow_clk);
+my_dff d0(slow_clk, pb_1,Q0 );
+
+my_dff d1(slow_clk, Q0,Q1 );
+my_dff d2(slow_clk, Q1,Q2 );
+assign Q2_bar = ~Q2;
+
+always @(*)
+begin
+    pb_out = Q1 & Q2_bar;
+end
+
+endmodule
+
+
+// Slow clock
+module clock_div(
+    input clk_100M,
+    output reg slow_clk
+    );
+
+    reg [26:0] counter = 0;
+    always @(posedge(clk_100M))
+    begin
+        counter <= (counter >= 249)?0:counter+1;
+        slow_clk <= (counter < 125)?1'b0:1'b1;
+    end
+endmodule
+
+// D Flip-Flop
+module dff(
+    input d,
+    input clk,
+    output reg q
+    );
+
+    always @(posedge(clk))
+    begin
+        q <= d;
+    end
 endmodule
