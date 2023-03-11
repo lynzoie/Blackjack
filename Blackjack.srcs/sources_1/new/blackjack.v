@@ -31,9 +31,9 @@ module blackjack(
     reg [C_SIZE-1:0] cur_state, next_state;
 
     // Input reg 
-    reg rst_reg;
-    reg hit_reg;
-    reg stand_reg;
+//    reg rst_reg;
+//    reg hit_reg;
+//    reg stand_reg;
 
     // Debounced input
     debounce db_rst(Rst, Clk, rst_reg);
@@ -172,13 +172,12 @@ module debounce(
 
 wire slow_clk;
 wire Q0, Q1, Q2, Q2_bar;
-wire btn_out;
 
 clock_div u1(clk,slow_clk);
-my_dff d0(slow_clk, pb_1,Q0 );
+dff d0(slow_clk, pb_1, Q0);
+dff d1(slow_clk, Q0, Q1);
+dff d2(clk, Q1, Q2);
 
-my_dff d1(slow_clk, Q0,Q1 );
-my_dff d2(slow_clk, Q1,Q2 );
 assign Q2_bar = ~Q2;
 
 always @(*)
@@ -205,8 +204,8 @@ endmodule
 
 // D Flip-Flop
 module dff(
-    input d,
     input clk,
+    input d,
     output reg q
     );
 
