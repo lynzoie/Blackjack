@@ -8,9 +8,20 @@ module tb_blackjack;
         Hit = 1'b0, 
         Stand = 1'b0;
     wire Win, Lose, Draw;
+    wire [3:0] Anode_Activate;
+    wire [6:0] LED_out;
     
     localparam period = 0.5;    // duration for each bit of the clock, 100MHz clock
-    blackjack UUT(.Clk(Clk), .Rst(Rst), .Hit(Hit), .Stand(Stand), .Win(Win), .Lose(Lose), .Draw(Draw));
+    blackjack UUT(.Clk(Clk), 
+        .Rst(Rst), 
+        .Hit(Hit), 
+        .Stand(Stand), 
+        .Win(Win), 
+        .Lose(Lose), 
+        .Draw(Draw),
+        .Anode_Activate(Anode_Activate),
+        .LED_out(LED_out)
+        );
     
     
     // Create fake clock
