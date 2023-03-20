@@ -3,8 +3,7 @@
 
 module random_num_gen(
     input clock,
-    input reset,
-    input score,
+    input [4:0] val_limit,
     output [4:0] rnd 
     );
     
@@ -14,9 +13,14 @@ module random_num_gen(
     reg [len-1:0] random_next, random_done;
     reg [3:0] count = 0;
     reg [3:0] count_next; //to keep track of the shifts
-    
+
     wire feedback = random[len-1] ^ random[2] ^ random[0]; 
 
+    always @ (posedge clock)
+    begin    
+        random <= random_next;
+        count <= count_next;
+    end
 
     always @ (*)
     begin
@@ -29,21 +33,11 @@ module random_num_gen(
         if (count == len)
         begin
             count = 0;
-            random_done = random; //assign the random number to output after 13 shifts
-            if (score)
+            random_done = random; //assign the random number to output after len shifts
+            if (random_done > val_limit)
             begin
-                if (random_done > 21)
-                begin
-                    random_done = random_done / 2;
-                end
+                random_done = random_done / (val_limit/2);
             end
-            else
-            begin
-                if (random_done > 10)
-                begin
-                    random_done = random_done / 4;
-                end
-            end 
         end
     end
 
