@@ -23,25 +23,62 @@ module blackjack(
             userState = 2'b01,
             dealerState = 2'b10,
             scoreState = 2'b11;
+
+    // Registers
     reg [C_SIZE-1:0] cur_state, next_state;
-
-
-    // Debounced input
-    debounce db_rst(Rst, Clk, rst_reg);
-    debounce db_hit(Hit, Clk, hit_reg);
-    debounce db_stand(Stand, Clk, stand_reg);
-
-    // Output reg
     reg win_reg;
     reg lose_reg;
     reg draw_reg;
+    wire [3:0] anode_activate_reg;
+    wire [6:0] led_out_reg;
 
     // Dealer and User's scores
     integer dealer_score;
     integer user_score;
 
 
+    // --- Module Instantiations ---//
+    // Seven Segment Display
+    seven_seg sev_disp(.Clk(Clk),
+        .user_score(user_score),
+        .dealer_score(dealer_score),
+        .Anode_Activate(anode_activate_reg),
+        .LED_out(led_out_reg)
+    );
 
+    // Debounced input
+    debounce db_rst(Rst, Clk, rst_reg);
+    debounce db_hit(Hit, Clk, hit_reg);
+    debounce db_stand(Stand, Clk, stand_reg);
+
+    // Randomized value
+    wire [4:0] user_score_test;
+    wire [4:0] dealer_score_test;
+    wire [4:0] user_rand_inc_test;
+    wire [4:0] dealer_rand_inc_test;
+
+    random_num_gen rand_user(.clock(Clk),
+        .val_limit(21),
+        .rnd(user_score_test)
+    );
+
+    random_num_gen rand_dealer(.clock(Clk),
+        .val_limit(21),
+        .rnd(dealer_score_test)
+    );
+
+    random_num_gen rand_user_inc(.clock(Clk),
+        .val_limit(10),
+        .rnd(user_rand_inc_test)
+    );
+
+    random_num_gen rand_dealer_inc(.clock(Clk),
+        .val_limit(10),
+        .rnd(dealer_rand_inc_test)
+    );
+
+    // TODO: work on putting the random num generators in here
+    // ------------------ MAIN MODULE------------------- //
     // Set initial values
     always @ (posedge Rst)
     begin
@@ -56,8 +93,6 @@ module blackjack(
         end
     end
 
-    // TODO: work on putting the random num generators in here
-    // ------- Statemachine ------- //
     always @ (posedge Clk) 
     begin
         next_state = cur_state;
@@ -149,88 +184,8 @@ module blackjack(
     assign Lose = lose_reg;
     assign Draw = draw_reg;
 
-    // -------- 7-segment section --------------//
-    integer onesDigit = 0;
-    integer twosDigit = 0;
-    integer threesDigit = 0;
-    integer foursDigit = 0;
-    integer refresh_counter = 0;
-    integer LED_activating_counter = 0;
-    reg [3:0] Anode_Activate_Var;
-    reg [6:0] LED_out_Var;
-    reg [3:0] LED_BCD;
-    
-    // Declare the digits for display
-    always @(posedge(Clk))
-    begin
-        // Dealer's score
-        foursDigit = dealer_score / 10;
-        threesDigit = dealer_score % 10;
-        // User's score
-        twosDigit = user_score / 10;
-        onesDigit = user_score % 10;
-    end
-    
-    // Activate one of four 7-seg displays
-    always @(posedge(Clk))
-    begin 
-        refresh_counter = refresh_counter + 1;      //increment counter
-        if(refresh_counter == 5000)                 //at 500
-            LED_activating_counter = 0;             //light onesDigit
-        if(refresh_counter == 10000)                //at 1,000
-            LED_activating_counter = 1;             //light twosDigit
-        if(refresh_counter == 15000)                //at 1,500
-            LED_activating_counter = 2;             //light threesDigit
-        if(refresh_counter == 20000)                //at 20,000
-            LED_activating_counter = 3;             //light foursDigit
-        if(refresh_counter == 25000)                //at 25,000
-            refresh_counter = 0;                    //start over at 0
-    end
-
-
-    always @(LED_activating_counter, foursDigit, threesDigit, twosDigit, onesDigit)                    //when 7-seg digit changes
-    begin
-        //LED_activating_counter = refresh_counter;
-        case(LED_activating_counter)                    //activate the digit
-            0: begin
-                Anode_Activate_Var = 4'b0111;           //activate LED1 and Deactivate LED2, LED3, LED4
-                LED_BCD = foursDigit;                   //the first digit of the 16-bit number
-            end
-            1: begin
-                Anode_Activate_Var = 4'b1011;           //activate LED2 and Deactivate LED1, LED3, LED4
-                LED_BCD = threesDigit;                  //the second digit of the 16-bit number
-            end
-            2: begin
-                Anode_Activate_Var = 4'b1101;           // activate LED3 and Deactivate LED2, LED1, LED4
-                LED_BCD = twosDigit;                    // the third digit of the 16-bit number
-            end
-            3: begin
-                Anode_Activate_Var = 4'b1110;           // activate LED4 and Deactivate LED2, LED3, LED1
-                LED_BCD = onesDigit;                    // the fourth digit of the 16-bit number 
-            end
-        endcase
-    end
-
-
-    always @(LED_BCD)
-    begin
-        case(LED_BCD)
-            4'b0000: LED_out_Var = 7'b0000001; // "0"     
-            4'b0001: LED_out_Var = 7'b1001111; // "1" 
-            4'b0010: LED_out_Var = 7'b0010010; // "2" 
-            4'b0011: LED_out_Var = 7'b0000110; // "3" 
-            4'b0100: LED_out_Var = 7'b1001100; // "4" 
-            4'b0101: LED_out_Var = 7'b0100100; // "5" 
-            4'b0110: LED_out_Var = 7'b0100000; // "6" 
-            4'b0111: LED_out_Var = 7'b0001111; // "7" 
-            4'b1000: LED_out_Var = 7'b0000000; // "8"     
-            4'b1001: LED_out_Var = 7'b0000100; // "9" 
-            default: LED_out_Var = 7'b0000001; // "0"
-        endcase
-    end
-
-    assign Anode_Activate = Anode_Activate_Var;
-    assign LED_out = LED_out_Var;
+    assign Anode_Activate = anode_activate_reg;
+    assign LED_out = led_out_reg;
 
 endmodule
 

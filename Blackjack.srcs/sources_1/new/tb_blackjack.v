@@ -10,9 +10,6 @@ module tb_blackjack;
     wire Win, Lose, Draw;
     wire [3:0] Anode_Activate;
     wire [6:0] LED_out;
-    
-    reg score;
-    wire [4:0] rnd;
 
     localparam period = 0.5;    // duration for each bit of the clock, 100MHz clock
     blackjack UUT(.Clk(Clk), 
@@ -25,13 +22,7 @@ module tb_blackjack;
         .Anode_Activate(Anode_Activate),
         .LED_out(LED_out)
         );
-    
-    random_num_gen test(.clock(Clk),
-        .reset(Rst),
-        .score(score),
-        .rnd(rnd)
-        );
-    
+
     // Create fake clock
     always
     begin
@@ -80,13 +71,7 @@ module tb_blackjack;
         #40;
         Hit = 0; 
     end 
-    
-    initial 
-    begin
-        score = 1'b0;
-        #500;
-        score = 1'b1;
-    end
+
 
 //    // Move across statemachine
 //    always @(posedge Clk)
