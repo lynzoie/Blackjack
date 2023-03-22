@@ -10,7 +10,7 @@ module tb_random_num_gen;
     wire [4:0] rnd; 
 
     localparam period = 0.5;
-    random_num_gen UUT(.clock(clock),
+    random_num_gen #(.START_VAL(22)) UUT(.clock(clock),
         .val_limit(val_limit),
         .rnd(rnd)
         );

@@ -33,10 +33,10 @@ module tb_blackjack;
         #period;
     end 
     
-    // Create fake button push 
+    // Win Case
     initial
     begin
-        #1201;
+        #100;
         Hit = 0;
         #10;
         Hit=1;
@@ -69,28 +69,157 @@ module tb_blackjack;
         #10;
         Hit=1;
         #40;
-        Hit = 0; 
+        Hit = 0;
+        
+        // Hit 2        
+        #300;
+        Hit = 0;
+        #10;
+        Hit=1;
+        #20;
+        Hit = 0;
+        #10;
+        Hit=1;
+        #30; 
+        Hit = 0;
+        #10;
+        Hit=1;
+        #40;
+        Hit = 0;
+        #10;
+        Hit=1;
+        #30; 
+        Hit = 0;
+        #10;
+        Hit=1; 
+        #1000; 
+        Hit = 0;
+        #10;
+        Hit=1;
+        #20;
+        Hit = 0;
+        #10;
+        Hit=1;
+        #30; 
+        Hit = 0;
+        #10;
+        Hit=1;
+        #40;
+        Hit = 0;
+         
+        // Hit 3
+        #1000;
+        Hit = 0;
+        #10;
+        Hit=1;
+        #20;
+        Hit = 0;
+        #10;
+        Hit=1;
+        #30; 
+        Hit = 0;
+        #10;
+        Hit=1;
+        #40;
+        Hit = 0;
+        #10;
+        Hit=1;
+        #30; 
+        Hit = 0;
+        #10;
+        Hit=1; 
+        #1000; 
+        Hit = 0;
+        #10;
+        Hit=1;
+        #20;
+        Hit = 0;
+        #10;
+        Hit=1;
+        #30; 
+        Hit = 0;
+        #10;
+        Hit=1;
+        #40;
+        Hit = 0;
+        
+        // Hit 4 
+        #1000;
+        Hit = 0;
+        #10;
+        Hit=1;
+        #20;
+        Hit = 0;
+        #10;
+        Hit=1;
+        #30; 
+        Hit = 0;
+        #10;
+        Hit=1;
+        #40;
+        Hit = 0;
+        #10;
+        Hit=1;
+        #30; 
+        Hit = 0;
+        #10;
+        Hit=1; 
+        #1000; 
+        Hit = 0;
+        #10;
+        Hit=1;
+        #20;
+        Hit = 0;
+        #10;
+        Hit=1;
+        #30; 
+        Hit = 0;
+        #10;
+        Hit=1;
+        #40;
+        Hit = 0;
     end 
-
-
-//    // Move across statemachine
-//    always @(posedge Clk)
-//    begin
-//        Hit = 1'b1;
-//        #20;    // wait 20ns
-        
-//        Hit = 1'b0;
-//        #20;
     
-//        Stand = 1'b1;
-//        #period;
-        
-//        Stand = 1'b0;
-//        Rst = 1'b1;
-//        #10;
-        
-//        Rst = 1'b0;
+    // Restart button
+    initial 
+    begin
+        // Rst 1 
+        #12000;
+        Rst = 0;
+        #10;
+        Rst = 1;
+        #20;
+        Rst = 0;
+        #10;
+        Rst = 1;
+        #30; 
+        Rst = 0;
+        #10;
+        Rst = 1;
+        #40;
+        Rst = 0;
+        #10;
+        Rst = 1;
+        #30; 
+        Rst = 0;
+        #10;
+        Rst = 1; 
+        #1000; 
+        Rst = 0;
+        #10;
+        Rst = 1;
+        #20;
+        Rst = 0;
+        #10;
+        Rst = 1;
+        #30; 
+        Rst = 0;
+        #10;
+        Rst = 1;
+        #40;
+        Rst = 0;
+    end
     
-//    end
+    
     
 endmodule

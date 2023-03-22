@@ -8,12 +8,14 @@ module debouncer(
     );
 
 wire slow_clk;
+wire slow_clk2;
 wire Q0, Q1, Q2, Q2_bar;
 
 clock_div u1(clk,slow_clk);
+clock_div2 u2(clk, slow_clk2);
 dff d0(slow_clk, pb_1, Q0);
 dff d1(slow_clk, Q0, Q1);
-dff d2(clk, Q1, Q2);
+dff d2(slow_clk2, Q1, Q2);
 
 assign Q2_bar = ~Q2;
 
@@ -34,8 +36,8 @@ module clock_div(
     reg [26:0] counter = 0;
     always @(posedge(clk_100M))
     begin
-        counter <= (counter >= 249)?0:counter+1;
-        slow_clk <= (counter < 125)?1'b0:1'b1;
+        counter <= (counter >= 350)?0:counter+1;
+        slow_clk <= (counter < 175)?1'b0:1'b1;
     end
 endmodule
 
@@ -46,8 +48,21 @@ module dff(
     output reg q
     );
 
-    always @(posedge(clk))
+    always @(clk)
     begin
         q <= d;
+    end
+endmodule
+
+module clock_div2(
+    input clk_100M,
+    output reg slow_clk
+    );
+
+    reg [26:0] counter = 0;
+    always @(posedge(clk_100M))
+    begin
+        counter <= (counter >= 4)?0:counter+1;
+        slow_clk <= (counter < 2)?1'b0:1'b1;
     end
 endmodule

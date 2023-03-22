@@ -1,15 +1,16 @@
 `timescale 1ns / 1ps
 
 
-module random_num_gen(
+module random_num_gen
+    #(parameter START_VAL=5) 
+    (
     input clock,
     input [4:0] val_limit,
     output [4:0] rnd 
     );
     
     localparam len = 5;
-    
-    reg [len-1:0] random = 5'hF;
+    reg [len-1:0] random = START_VAL;    // default 5'hF
     reg [len-1:0] random_next, random_done;
     reg [3:0] count = 0;
     reg [3:0] count_next; //to keep track of the shifts
