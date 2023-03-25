@@ -25,15 +25,16 @@ module random_num_gen
 
     always @ (*)
     begin
-        random_next = random; //default state stays the same
-        count_next = count;
+//        random_next = random; //default state stays the same
+//        count_next = count;
       
         random_next = {random[len-2:0], feedback}; //shift left the xor'd every posedge clock
         count_next = count + 1;
     
         if (count == len)
         begin
-            count = 0;
+//            count = 0;
+            count_next = 0;
             random_done = random; //assign the random number to output after len shifts
             if (random_done > val_limit)
             begin

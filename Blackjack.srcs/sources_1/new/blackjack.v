@@ -53,29 +53,29 @@ module blackjack(
     debouncer db_stand(Stand, Clk, stand_reg);
 
     // Randomized value
-    wire [4:0] user_score_test;
-    wire [4:0] dealer_score_test;
-    wire [4:0] user_rand_inc_test;
-    wire [4:0] dealer_rand_inc_test;
+    wire [4:0] user_score_wire;
+    wire [4:0] dealer_score_wire;
+    wire [4:0] user_rand_inc;
+    wire [4:0] dealer_rand_inc;
 
     random_num_gen #(.START_VAL(10)) rand_user(.clock(Clk),
         .val_limit(21),
-        .rnd(user_score_test)
+        .rnd(user_score_wire)
     );
 
     random_num_gen #(.START_VAL(14)) rand_dealer(.clock(Clk),
         .val_limit(21),
-        .rnd(dealer_score_test)
+        .rnd(dealer_score_wire)
     );
 
     random_num_gen #(.START_VAL(9)) rand_user_inc(.clock(Clk),
         .val_limit(10),
-        .rnd(user_rand_inc_test)
+        .rnd(user_rand_inc)
     );
 
     random_num_gen #(.START_VAL(4)) rand_dealer_inc(.clock(Clk),
         .val_limit(10),
-        .rnd(dealer_rand_inc_test)
+        .rnd(dealer_rand_inc)
     );
 
     // TODO: work on putting the random num generators in here
@@ -94,6 +94,7 @@ module blackjack(
         end
     end
 
+    // always @ (posedge Clk) 
     always @ (posedge Clk) 
     begin
         next_state = cur_state;
@@ -103,8 +104,8 @@ module blackjack(
                 // Randomize user_score and dealer_score
                 // user_score = {$random} % 22;
                 // dealer_score = {$random} % 22;
-                user_score = user_score_test;
-                dealer_score = dealer_score_test;
+                user_score = user_score_wire;
+                dealer_score = dealer_score_wire;
 
                 // Reset outcome
                 win_reg     = 1'b0;
@@ -129,7 +130,7 @@ module blackjack(
                 begin
                     // Increment score by random number between 1-10
                     // user_score = user_score + {$random} % 11;
-                    user_score = user_score + user_rand_inc_test;
+                    user_score = user_score + user_rand_inc;
                 end
             end
             dealerState: 
@@ -142,7 +143,7 @@ module blackjack(
                 begin
                     // Increment dealer's score until it reaches 17 or below
                     // dealer_score = dealer_score + {$random} % 11;
-                    dealer_score = dealer_score + dealer_rand_inc_test;
+                    dealer_score = dealer_score + dealer_rand_inc;
                 end
             end
             scoreState: 

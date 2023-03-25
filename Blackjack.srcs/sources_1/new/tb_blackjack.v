@@ -180,11 +180,124 @@ module tb_blackjack;
         Hit = 0;
     end 
     
+    // Stand button
+    initial 
+    begin
+        // Stand 1
+        #10000;
+        Stand = 0;
+        #10;
+        Stand = 1;
+        #20;
+        Stand = 0;
+        #10;
+        Stand = 1;
+        #30; 
+        Stand = 0;
+        #10;
+        Stand = 1;
+        #40;
+        Stand = 0;
+        #10;
+        Stand = 1;
+        #30; 
+        Stand = 0;
+        #10;
+        Stand = 1; 
+        #1000; 
+        Stand = 0;
+        #10;
+        Stand = 1;
+        #20;
+        Stand = 0;
+        #10;
+        Stand = 1;
+        #30; 
+        Stand = 0;
+        #10;
+        Stand = 1;
+        #40;
+        Stand = 0;
+        
+         // Stand 2
+        #1000;
+        Stand = 0;
+        #10;
+        Stand = 1;
+        #20;
+        Stand = 0;
+        #10;
+        Stand = 1;
+        #30; 
+        Stand = 0;
+        #10;
+        Stand = 1;
+        #40;
+        Stand = 0;
+        #10;
+        Stand = 1;
+        #30; 
+        Stand = 0;
+        #10;
+        Stand = 1; 
+        #1000; 
+        Stand = 0;
+        #10;
+        Stand = 1;
+        #20;
+        Stand = 0;
+        #10;
+        Stand = 1;
+        #30; 
+        Stand = 0;
+        #10;
+        Stand = 1;
+        #40;
+        Stand = 0;
+        
+          // Stand 3
+        #1000;
+        Stand = 0;
+        #10;
+        Stand = 1;
+        #20;
+        Stand = 0;
+        #10;
+        Stand = 1;
+        #30; 
+        Stand = 0;
+        #10;
+        Stand = 1;
+        #40;
+        Stand = 0;
+        #10;
+        Stand = 1;
+        #30; 
+        Stand = 0;
+        #10;
+        Stand = 1; 
+        #1000; 
+        Stand = 0;
+        #10;
+        Stand = 1;
+        #20;
+        Stand = 0;
+        #10;
+        Stand = 1;
+        #30; 
+        Stand = 0;
+        #10;
+        Stand = 1;
+        #40;
+        Stand = 0;
+    end
+    
+    
     // Restart button
     initial 
     begin
         // Rst 1 
-        #12000;
+        #50000;
         Rst = 0;
         #10;
         Rst = 1;

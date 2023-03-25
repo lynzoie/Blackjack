@@ -47,16 +47,16 @@ create_clock -period 10.000 -name sys_clk_pin -waveform {0.000 5.000} -add [get_
 # LEDs
 set_property PACKAGE_PIN U16 [get_ports Win]
 set_property IOSTANDARD LVCMOS33 [get_ports Win]
-set_property PACKAGE_PIN E19 [get_ports Lose]
-set_property IOSTANDARD LVCMOS33 [get_ports Lose]
-set_property PACKAGE_PIN U19 [get_ports Draw]
+set_property PACKAGE_PIN E19 [get_ports Draw]
 set_property IOSTANDARD LVCMOS33 [get_ports Draw]
-#set_property PACKAGE_PIN V19 [get_ports {LED[3]}]
-#set_property IOSTANDARD LVCMOS33 [get_ports {LED[3]}]
-#set_property PACKAGE_PIN W18 [get_ports {LED[4]}]
-#set_property IOSTANDARD LVCMOS33 [get_ports {LED[4]}]
-#set_property PACKAGE_PIN U15 [get_ports {LED[5]}]
-#set_property IOSTANDARD LVCMOS33 [get_ports {LED[5]}]
+set_property PACKAGE_PIN U19 [get_ports Lose]
+set_property IOSTANDARD LVCMOS33 [get_ports Lose]
+#set_property PACKAGE_PIN V19 [get_ports Hit_LED]
+#set_property IOSTANDARD LVCMOS33 [get_ports Hit_LED]
+#set_property PACKAGE_PIN W18 [get_ports Stand_LED]
+#set_property IOSTANDARD LVCMOS33 [get_ports Stand_LED]
+#set_property PACKAGE_PIN U15 [get_ports Reset_LED]
+#set_property IOSTANDARD LVCMOS33 [get_ports Reset_LED]
 #set_property PACKAGE_PIN U14 [get_ports {LED[6]}]
 #set_property IOSTANDARD LVCMOS33 [get_ports {LED[6]}]
 #set_property PACKAGE_PIN V14 [get_ports {LED[7]}]
@@ -71,65 +71,65 @@ set_property IOSTANDARD LVCMOS33 [get_ports Draw]
 #set_property IOSTANDARD LVCMOS33 [get_ports {LED[11]}]
 #set_property PACKAGE_PIN P3 [get_ports {LED[12]}]
 #set_property IOSTANDARD LVCMOS33 [get_ports {LED[12]}]
-#set_property PACKAGE_PIN N3 [get_ports {LED[13]}]
-#set_property IOSTANDARD LVCMOS33 [get_ports {LED[13]}]
-#set_property PACKAGE_PIN P1 [get_ports {LED[14]}]
-#set_property IOSTANDARD LVCMOS33 [get_ports {LED[14]}]
-#set_property PACKAGE_PIN L1 [get_ports {LED[15]}]
-#set_property IOSTANDARD LVCMOS33 [get_ports {LED[15]}]
+set_property PACKAGE_PIN N3 [get_ports Stand_LED]
+set_property IOSTANDARD LVCMOS33 [get_ports Stand_LED]
+set_property PACKAGE_PIN P1 [get_ports Reset_LED]
+set_property IOSTANDARD LVCMOS33 [get_ports Reset_LED]
+set_property PACKAGE_PIN L1 [get_ports Hit_LED]
+set_property IOSTANDARD LVCMOS33 [get_ports Hit_LED]
 
 
 #7 segment display
 ##Bank = 34, Pin name = ,						Sch name = CA
-set_property PACKAGE_PIN W7 [get_ports {LED_out[6]}]
-set_property IOSTANDARD LVCMOS33 [get_ports {LED_out[6]}]
+set_property PACKAGE_PIN W7 [get_ports LED_out[6]]
+set_property IOSTANDARD LVCMOS33 [get_ports LED_out[6]]
 ##Bank = 34, Pin name = ,					Sch name = CB
-set_property PACKAGE_PIN W6 [get_ports {LED_out[5]}]
-set_property IOSTANDARD LVCMOS33 [get_ports {LED_out[5]}]
+set_property PACKAGE_PIN W6 [get_ports LED_out[5]]
+set_property IOSTANDARD LVCMOS33 [get_ports LED_out[5]]
 ##Bank = 34, Pin name = ,					Sch name = CC
-set_property PACKAGE_PIN U8 [get_ports {LED_out[4]}]
-set_property IOSTANDARD LVCMOS33 [get_ports {LED_out[4]}]
+set_property PACKAGE_PIN U8 [get_ports LED_out[4]]
+set_property IOSTANDARD LVCMOS33 [get_ports LED_out[4]]
 ##Bank = 34, Pin name = ,						Sch name = CD
-set_property PACKAGE_PIN V8 [get_ports {LED_out[3]}]
-set_property IOSTANDARD LVCMOS33 [get_ports {LED_out[3]}]
+set_property PACKAGE_PIN V8 [get_ports LED_out[3]]
+set_property IOSTANDARD LVCMOS33 [get_ports LED_out[3]]
 ##Bank = 34, Pin name = ,						Sch name = CE
-set_property PACKAGE_PIN U5 [get_ports {LED_out[2]}]
-set_property IOSTANDARD LVCMOS33 [get_ports {LED_out[2]}]
+set_property PACKAGE_PIN U5 [get_ports LED_out[2]]
+set_property IOSTANDARD LVCMOS33 [get_ports LED_out[2]]
 ##Bank = 34, Pin name = ,						Sch name = CF
-set_property PACKAGE_PIN V5 [get_ports {LED_out[1]}]
-set_property IOSTANDARD LVCMOS33 [get_ports {LED_out[1]}]
+set_property PACKAGE_PIN V5 [get_ports LED_out[1]]
+set_property IOSTANDARD LVCMOS33 [get_ports LED_out[1]]
 ##Bank = 34, Pin name = ,						Sch name = CG
-set_property PACKAGE_PIN U7 [get_ports {LED_out[0]}]
-set_property IOSTANDARD LVCMOS33 [get_ports {LED_out[0]}]
+set_property PACKAGE_PIN U7 [get_ports LED_out[0]]
+set_property IOSTANDARD LVCMOS33 [get_ports LED_out[0]]
 
 #Bank = 34, Pin name = ,						Sch name = DP
 #set_property PACKAGE_PIN V7 [get_ports {SSEG_CA[7]}]
 #set_property IOSTANDARD LVCMOS33 [get_ports {SSEG_CA[7]}]
 
 ##Bank = 34, Pin name = ,						Sch name = AN0
-set_property PACKAGE_PIN U2 [get_ports {Anode_Activate[0]}]
-set_property IOSTANDARD LVCMOS33 [get_ports {Anode_Activate[0]}]
+set_property PACKAGE_PIN U2 [get_ports Anode_Activate[0]]
+set_property IOSTANDARD LVCMOS33 [get_ports Anode_Activate[0]]
 ##Bank = 34, Pin name = ,						Sch name = AN1
-set_property PACKAGE_PIN U4 [get_ports {Anode_Activate[1]}]
-set_property IOSTANDARD LVCMOS33 [get_ports {Anode_Activate[1]}]
+set_property PACKAGE_PIN U4 [get_ports Anode_Activate[1]]
+set_property IOSTANDARD LVCMOS33 [get_ports Anode_Activate[1]]
 ##Bank = 34, Pin name = ,						Sch name = AN2
-set_property PACKAGE_PIN V4 [get_ports {Anode_Activate[2]}]
-set_property IOSTANDARD LVCMOS33 [get_ports {Anode_Activate[2]}]
+set_property PACKAGE_PIN V4 [get_ports Anode_Activate[2]]
+set_property IOSTANDARD LVCMOS33 [get_ports Anode_Activate[2]]
 ##Bank = 34, Pin name = ,					Sch name = AN3
-set_property PACKAGE_PIN W4 [get_ports {Anode_Activate[3]}]
-set_property IOSTANDARD LVCMOS33 [get_ports {Anode_Activate[3]}]
+set_property PACKAGE_PIN W4 [get_ports Anode_Activate[3]]
+set_property IOSTANDARD LVCMOS33 [get_ports Anode_Activate[3]]
 
 
 #Buttons
 #Bank = 14, Pin name = ,					Sch name = BTNC
-set_property PACKAGE_PIN U18 [get_ports {Reset}]
-set_property IOSTANDARD LVCMOS33 [get_ports {Reset}]
+set_property PACKAGE_PIN U18 [get_ports Reset]
+set_property IOSTANDARD LVCMOS33 [get_ports Reset]
 #Bank = 14, Pin name = ,					Sch name = BTNU
 #set_property PACKAGE_PIN T18 [get_ports {BTN[0]}]
 #set_property IOSTANDARD LVCMOS33 [get_ports {BTN[0]}]
 #Bank = 14, Pin name = ,	Sch name = BTNL
-set_property PACKAGE_PIN W19 [get_ports {Hit}]
-set_property IOSTANDARD LVCMOS33 [get_ports {Hit}]
+set_property PACKAGE_PIN W19 [get_ports Hit]
+set_property IOSTANDARD LVCMOS33 [get_ports Hit]
 #Bank = 14, Pin name = ,							Sch name = BTNR
 set_property PACKAGE_PIN T17 [get_ports Stand]
 set_property IOSTANDARD LVCMOS33 [get_ports Stand]
