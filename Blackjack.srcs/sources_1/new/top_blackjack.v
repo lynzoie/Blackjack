@@ -11,6 +11,7 @@ module top_blackjack(
     output Hit_LED,
     output Reset_LED,
     output Stand_LED,
+    output [1:0] State_LED,
     // 7-seg output
     output [3:0] Anode_Activate,
     output [6:0] LED_out
@@ -24,6 +25,7 @@ module top_blackjack(
         .Win(Win),
         .Lose(Lose),
         .Draw(Draw),
+        .State_LED(State_LED),
         .Anode_Activate(Anode_Activate),
         .LED_out(LED_out)
     ); 
