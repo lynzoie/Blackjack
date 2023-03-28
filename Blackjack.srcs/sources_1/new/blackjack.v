@@ -79,7 +79,7 @@ module blackjack(
         .rnd(user_score_wire)
     );
 
-    random_num_gen #(.START_VAL(16)) rand_dealer(.clock(Clk),
+    random_num_gen #(.START_VAL(10)) rand_dealer(.clock(Clk),
         .val_limit(21),
         .rnd(dealer_score_wire)
     );
@@ -158,8 +158,6 @@ module blackjack(
              initState: 
              begin
                  // Randomize user_score and dealer_score
-                 // user_score = {$random} % 22;
-                 // dealer_score = {$random} % 22;
                  user_score = user_score_wire;
                  dealer_score = dealer_score_wire;
 
@@ -191,14 +189,13 @@ module blackjack(
              end
              dealerState: 
              begin
-                 if (dealer_score > 17 || user_score >= 21) 
+                 if (dealer_score >= 17 || user_score >= 21) 
                  begin
                      next_state = scoreState;
                  end
                  else
                  begin
                      // Increment dealer's score until it reaches 17 or below
-                     // dealer_score = dealer_score + {$random} % 11;
                      dealer_score = dealer_score + dealer_rand_inc;
                  end
              end
